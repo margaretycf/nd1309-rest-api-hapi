@@ -26,7 +26,7 @@ class BlockController {
             method: 'GET',
             path: '/api/block/{index}',
             handler: (request, h) => {
-               
+                return JSON.stringify(this.blocks[request.params["index"]]).toString();               
             }
         });
     }
@@ -39,7 +39,11 @@ class BlockController {
             method: 'POST',
             path: '/api/block',
             handler: (request, h) => {
-                
+                let newBlock = new BlockClass.Block(request.payload.data);
+                newBlock.height = this.blocks.length;
+                newBlock.hash = SHA256(JSON.stringify(newBlock)).toString();
+                this.blocks.push(newBlock);
+                return 'the posted block:\n' + JSON.stringify(newBlock).toString();
             }
         });
     }
